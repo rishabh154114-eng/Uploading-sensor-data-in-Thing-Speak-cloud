@@ -1,4 +1,6 @@
-# Uploading temperature sensor data in Thing Speak cloud
+## Name : T.Rishabh Srivatsav
+## Reg no : 25001966
+## Ex 3 Temperature sensor data in Thing Speak cloud
 
 # AIM:
 To monitor the temperature sensor data in the Thing speak using an ESP32 controller.
@@ -71,10 +73,73 @@ Automatically act on your data and communicate using third-party services like T
 
 
 # PROGRAM:
+#include "ThingSpeak.h" </br>
+#include <WiFi.h> </br>
+#include "DHT.h" </br>
+char ssid[]="OnePlus"; </br>
+char pass[]="12345678"; </br>
+
+const  int out = 2; </br>
+float Temperature = 0;</br>
+float Humidity =0;</br>
+WiFiClient client;</br>
+DHT dht(out,DHT11); </br>
+
+unsigned long myChannelField= 3103060; </br>
+const char *myWriteAPIkey="T3HTMVSGX0HWEI86"; </br>
+const int TemperatureField=1; </br>
+const int HumidityField=2; </br>
+
+
+
+void setup() { </br>
+  Serial.begin(115200); </br>
+  ThingSpeak.begin(client); </br>
+  dht.begin(); </br>
+  pinMode(out,INPUT); </br>
+}  </br>
+
+
+void loop() {   </br>
+ if (WiFi.status()!= WL_CONNECTED) { </br>
+  Serial .print("Attempting to connect to ssid:"); </br>
+  Serial.println(ssid); </br>
+  while(WiFi.status()!= WL_CONNECTED) </br>
+  {
+    WiFi.begin(ssid,pass); </br>
+    Serial.print("."); </br>
+    delay(5000); </br>
+
+  }
+  Serial.println("\nConnected.");</br>
+ }
+Temperature = dht.readTemperature(); </br>
+Humidity = dht.readHumidity(); </br>
+
+Serial.print("Temperature: "); </br>
+Serial.print(Temperature); </br>
+Serial.println(" C"); </br>
+
+Serial.print("Humidity: "); </br>
+Serial.print(Humidity); </br>
+Serial.println(" g.m-3"); </br>
+ThingSpeak.setField(TemperatureField,Temperature); </br>
+ThingSpeak.setField(HumidityField,Humidity); </br>
+ThingSpeak.writeFields(myChannelField,myWriteAPIkey);</br>
+delay(5000); </br>
+} </br>
 
 # CIRCUIT DIAGRAM:
 
+
+<img width="960" height="1280" alt="image" src="https://github.com/user-attachments/assets/58788dda-d093-4cd7-aa80-7e0eb41d96e3" />
+
+
 # OUTPUT:
+Thingspeak  Graph :
+<img width="1920" height="1200" alt="Screenshot 2025-10-08 082651" src="https://github.com/user-attachments/assets/2f91df7e-e317-4c2e-a4aa-4506baff38fd" /></br>
+
+
 
 # RESULT:
 
